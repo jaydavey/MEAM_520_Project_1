@@ -178,7 +178,10 @@ while(true)
     end
     
     % Calculate joint angles.
-    thetanow = team102_linear_int(tnow,0,tprep,thetahome,thetastart);
+    thetanow = zeros(6, 1);
+    for i = 1:6
+        thetanow(i) = team102_linear_int(tnow,0,tprep,thetahome(i),thetastart(i));
+    end
 
     % Servo the robot to this pose to prepare to dance.
     pumaServo(thetanow);
