@@ -1,0 +1,112 @@
+%% Timestamp function
+% This function takes in a music file, plots the wave form, plays it back,
+% and records the time everytime a key is pressed.  Manual beat detection
+
+%drive an object around the screen
+close all; clear all; clc;
+
+%setup plotting
+h1 = figure(1);
+scrnpos = [800, 290, 800,  600];  %xstart, ystart, xdist, ydist
+set(h1,'OuterPosition',scrnpos) 
+axis([-10 10 -10 10]);
+
+%setup a function to be called when a keyboard key is pressed
+set(h1, 'KeyPressFcn', @(h,evt) MyKeyPress_Callback(evt.Key) );
+%keyboard interrupt
+global key;
+key = -1;
+
+hold on
+text(0,0,'Last Recorded Time:');
+t1 = text(4,0,'0.0');
+text(0,-1,'Current Time:');
+t2 = text(4,-1,'0.0');
+
+%% Definitions
+
+% Define music filename (without team number).
+musicfilename = 'Check It Yo E';
+teamnumber = '102';
+
+%% Music
+
+% Load the piece of music for the robot to dance to.
+[y,Fs] = audioread([num2str(teamnumber) ' ' musicfilename '.wav']);
+
+% Calculate the duration of the music.
+musicduration = (length(y)-1)/Fs;
+
+% Create a time vector for the entire piece of music, for use in plotting.
+t = (1:musicduration)';
+
+% Pad the start of the music file with zeros for the silence.
+y = [zeros(length(t)-length(y),2); y];
+
+
+%% Choose duration
+
+% Set the start and stop times of the segment we want to test.
+% To play the entire dance, set tstart = t(1) and tstop = t(end).
+tstart = t(1);
+%tstop = t(end);
+tstop = t(end);
+
+% Select only the part of the music that we want to play right now, from
+% tstart to tstop.
+yplay = y(1+round(Fs*(tstart - t(1))):round(Fs*(tstop-t(1))),:);
+
+% Put this snippet into an audio player so we can listen to it.
+music = audioplayer(yplay,Fs);
+
+% place to store the times of 
+tvia = [];
+tvia_counter = 1;
+%% Start music and timer
+
+% Start the zero-padded music so we hear it.
+play(music);
+
+tic;
+
+while key ~= 'q'
+    % Increment our counter.
+    i = i+1; 
+   %update the input position with keyboard input
+    switch key 
+        case 'downarrow'
+            % record time
+            tvia(tvia_counter) = toc;
+            set(t1,'String',num2str(tvia(tvia_counter)));
+            
+            
+            tvia_counter = tvia_counter+1;
+            key = -1; % reset the current keypress value
+        otherwise 
+            
+    end
+    set(t2,'String',num2str(toc));
+    pause(0.01);  %only update every 10ms
+    
+end
+stop(music);
+dance = zeros(length(tvia),20); %1 = time of via point, 
+                                %2:7 position at via point
+                                %8:13 vel at via point
+                                %14:19 acc at via point
+                                %20 type of traj
+
+dance(:,1) = tvia';
+
+close all;
+save('team102_test.mat')
+
+
+
+
+
+
+
+
+
+
