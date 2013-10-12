@@ -75,7 +75,7 @@ y = [zeros(length(t)-length(y),2); y];
 
 % Set the start and stop times of the segment we want to test.
 % To play the entire dance, set tstart = t(1) and tstop = t(end).
-tstart = t(1);
+tstart = 30; %t(1);
 %tstop = t(end);
 tstop = 55;
 
@@ -219,6 +219,7 @@ while(true)
     % Get the current time elapsed and add it to the time where we're
     % starting in the song. Store this value in the thistory vector.   
     thistory(i) = toc + tstart;
+    disp(thistory(i));
     
     % Check if we have passed the end of the performance.
     if (thistory(i) > tstop)
