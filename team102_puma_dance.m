@@ -25,9 +25,6 @@ studentnames = 'Alex McCraw and Jay Davey';
 % Load the dance file from disk.
 load team102
 
-dance_2=dlmread('dance_2.txt',',');
-dance = dance_2;
-
 % Pull the list of via point times out of the dance matrix for use below.
 tvia = dance(:,1);
 
@@ -80,7 +77,7 @@ y = [zeros(length(t)-length(y),2); y];
 % To play the entire dance, set tstart = t(1) and tstop = t(end).
 tstart = t(1);
 %tstop = t(end);
-tstop = 20;
+tstop = 55;
 
 % Select only the part of the music that we want to play right now, from
 % tstart to tstop.
