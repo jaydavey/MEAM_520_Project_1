@@ -183,7 +183,8 @@ while(true)
     % Calculate joint angles.
     thetanow = zeros(6, 1);
     for i = 1:6
-        thetanow(i) = team102_linear_int(tnow,0,tprep,thetahome(i),thetastart(i));
+        thetas = team102_linear_int(tnow,0,tprep,thetahome(i),thetastart(i));
+        thetanow(i) = thetas(1);
     end
 
     % Servo the robot to this pose to prepare to dance.
@@ -270,10 +271,10 @@ for i = 1:length(h1)
 end
 
 hold on
-for i = 1:length(h1)
-    plot([tstart, tstop],[theta_mins(i), theta_mins(i)], 'color', color(i), 'LineStyle', '--')
-    plot([tstart, tstop],[theta_maxs(i), theta_maxs(i)], 'color', color(i), 'LineStyle', '--')
-end
+% for i = 1:length(h1)
+%     plot([tstart, tstop],[theta_mins(i), theta_mins(i)], 'color', color(i), 'LineStyle', '--')
+%     plot([tstart, tstop],[theta_maxs(i), theta_maxs(i)], 'color', color(i), 'LineStyle', '--')
+% end
 
 title(['Team ' num2str(teamnumber) ': Joint Angles over Time'])
 axis auto
