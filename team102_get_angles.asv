@@ -54,16 +54,13 @@ for i = 1:6
     times(2, i) = traj_temp;
 end
 
-% Initialize empty thetas matrix
-thetas = zeros(6, 3);
-
 % Select the correct trajectory type for each joint
 for i = 1:6
-    switch (trajectorytypevia(times(i), i))
+    switch (trajectorytypevia(times(i), ))
         case 0
             % Linear interpolation
             % You may not use this pcoded file in your solution.
-            thetas(i, :) = team102_linear_int(t, tvia(times(1, i)), tvia(times(2, i)), thetavia(times(1, i), i), thetavia(times(2, i), i));
+            thetas = team102_linear_int(t, tvia(traj), tvia(traj+1), thetavia(traj,:)', thetavia(traj+1, :)');
         case 1
             % Cubic interpolation
         case 2
@@ -73,5 +70,4 @@ for i = 1:6
             thetas = team102_LSPB_int(t, tvia(traj), tvia(traj+1), thetavia(traj,:)', thetavia(traj+1, :)', thetadotvia(traj,:)', thetadotvia(traj+1, :)', t_blend);
         otherwise
             error(['Unknown trajectory type: ' num2str(trajectorytypevia(traj))])
-    end
 end
