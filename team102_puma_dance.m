@@ -25,6 +25,9 @@ studentnames = 'Alex McCraw and Jay Davey';
 % Load the dance file from disk.
 load team102
 
+dance_2=dlmread('dance_2.txt',',');
+dance = dance_2;
+
 % Pull the list of via point times out of the dance matrix for use below.
 tvia = dance(:,1);
 
