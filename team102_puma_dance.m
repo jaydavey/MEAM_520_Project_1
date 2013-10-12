@@ -34,6 +34,21 @@ team102_get_angles
 % Define music filename (without team number).
 musicfilename = 'Check It Yo E';
 
+%% Robot Parameters
+
+% Define joint limits
+theta1_min = degtorad(-180);
+theta1_max = degtorad(110);
+theta2_min = degtorad(-75);
+theta2_max = degtorad(240);
+theta3_min = degtorad(-235);
+theta3_max = degtorad(60);
+theta4_min = degtorad(-580);
+theta4_max = degtorad(40);
+theta5_min = degtorad(-120);
+theta5_max = degtorad(110);
+theta6_min = degtorad(-215);
+theta6_max = degtorad(295);
 
 %% Music
 
@@ -160,7 +175,7 @@ while(true)
     end
     
     % Calculate joint angles.
-    thetanow = team102_linear_trajectory(tnow,0,tprep,thetahome,thetastart);
+    thetanow = team102_linear_int(tnow,0,tprep,thetahome,thetastart);
 
     % Servo the robot to this pose to prepare to dance.
     pumaServo(thetanow);
