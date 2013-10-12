@@ -1,5 +1,6 @@
 %% PUMA Dance
 %
+% Written by Alex McCraw and Jay Davey
 % Starter code by Katherine J. Kuchenbecker
 % MEAM 520 at the University of Pennsylvania
 
@@ -16,22 +17,22 @@ home
 %% Definitions
 
 % Define team number.
-teamnumber = 100;
+teamnumber = 102;
 
 % Define student names.
-studentnames = 'First Name and Second Name';
+studentnames = 'Alex McCraw and Jay Davey';
 
 % Load the dance file from disk.
-load team100
+load team102
 
 % Pull the list of via point times out of the dance matrix for use below.
 tvia = dance(:,1);
 
 % Initialize the function that calculates angles.
-team100_get_angles
+team102_get_angles
 
 % Define music filename (without team number).
-musicfilename = 'Turkey in the Straw N';
+musicfilename = 'Check It Yo E';
 
 
 %% Music
@@ -57,7 +58,8 @@ y = [zeros(length(t)-length(y),2); y];
 % Set the start and stop times of the segment we want to test.
 % To play the entire dance, set tstart = t(1) and tstop = t(end).
 tstart = t(1);
-tstop = t(end);
+%tstop = t(end);
+tstop = 20;
 
 % Select only the part of the music that we want to play right now, from
 % tstart to tstop.
@@ -129,7 +131,8 @@ pumaServo(thetahome);
 %% Initialize dance
 
 % Calculate the joint angles where the robot should start.
-thetastart = team100_get_angles(tstart);
+thetas = team102_get_angles(tstart);
+thetastart = thetas(:,1);
 
 % Calculate time needed to get from home pose to starting pose moving at
 % angular speed of 0.5 radians per second on the joint that has the
@@ -157,7 +160,7 @@ while(true)
     end
     
     % Calculate joint angles.
-    thetanow = team100_linear_trajectory(tnow,0,tprep,thetahome,thetastart);
+    thetanow = team102_linear_trajectory(tnow,0,tprep,thetahome,thetastart);
 
     % Servo the robot to this pose to prepare to dance.
     pumaServo(thetanow);
@@ -167,6 +170,8 @@ end
 % these for speed, making them much larger than we will need.
 thistory = zeros(10000,1);
 thetahistory = zeros(10000,6);
+thetadothistory = zeros(10000,6);
+theta2dothistory = zeros(10000,6);
 
 % Initialize our counter at zero.
 i = 0;
@@ -203,7 +208,10 @@ while(true)
     
     % Calculate the joint angles for the robot at this point in time and
     % store in our thetahistory matrix.
-    thetahistory(i,:) = team100_get_angles(thistory(i));
+    thetas = team102_get_angles(thistory(i));
+    thetahistory(i,:) = thetas(:,1);
+    thetadothistory(i,:) = thetas(:,2);
+    theta2dothistory(i,:) = thetas(:,3);
 
     % Servo the robot to these new joint angles.
     pumaServo(thetahistory(i,:));
@@ -219,6 +227,8 @@ pumaStop
 % preallocated for speed.
 thistory(i:end) = [];
 thetahistory(i:end,:) = [];
+thetadothistory(i:end,:) = [];
+theta2dothistory(i:end,:) = [];
 
 
 %% Plot output
@@ -226,9 +236,15 @@ thetahistory(i:end,:) = [];
 % Open figure 3 and clear it.
 figure(3)
 clf
-
-% Plot the joint angle history (thetahistory) versus thistory in a way that
-% makes it easy to see how the joint angles changed during the dance.
+subplot(3,1,1)
+plot(thistory, thetahistory)
 title(['Team ' num2str(teamnumber) ': Joint Angles over Time'])
-axis([0 1 0 1])
-text(.5,.5,'You need to complete this plot.','horizontalalignment','center')
+axis auto
+subplot(3,1,2)
+plot(thistory, thetadothistory)
+title(['Team ' num2str(teamnumber) ': Joint Velocities over Time'])
+axis auto
+subplot(3,1,3)
+plot(thistory, theta2dothistory)
+title(['Team ' num2str(teamnumber) ': Joint Accelerations over Time'])
+axis auto

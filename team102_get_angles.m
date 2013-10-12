@@ -1,13 +1,13 @@
-function thetas = team100_get_angles(t)
+function thetas = team102_get_angles(t)
 
 % Define dance and all other variables needed multiple times to be persistent.
-persistent tvia thetavia thetadotvia trajectorytypevia
+persistent tvia thetavia thetadotvia theta2dotvia trajectorytypevia
 
 % This function is initialized by calling it with no argument.
 if (nargin == 0)
     
     % Load the team's dance file from disk.  It contains the variable dance.
-    load team100
+    load team102
     
     % Pull the list of via point times out of the dance matrix.
     tvia = dance(:,1);
@@ -18,8 +18,11 @@ if (nargin == 0)
     % Pull the list of joint angle velocities out of the dance matrix.
     thetadotvia = dance(:,8:13);
     
+    % Pull the list of joint angle accelerations out of the dance matrix
+    theta2dotvia = dance(:,14:19);
+    
     % Pull the list of trajectory types out of the dance matrix.
-    trajectorytypevia = dance(:,14);
+    trajectorytypevia = dance(:,20);
     
     % Return from initialization.
     return
@@ -35,17 +38,15 @@ traj = find(t < tvia,1) - 1;
 % Select the correct trajectory types.
 switch (trajectorytypevia(traj))
     case 0
-        % Linearly interpolate between the via points using a pcoded file.
+        % Linear interpolation
         % You may not use this pcoded file in your solution.
-        thetas = team100_linear_trajectory(t,tvia(traj),tvia(traj+1),thetavia(traj,:)',thetavia(traj+1,:)');
+        thetas = team102_linear_int(t, tvia(traj), tvia(traj+1), thetavia(traj,:)', thetavia(traj+1, :)');
     case 1
-        % Just return the joint angles of the via point that starts this
-        % trajectory.  This is not a good interpolation method.
-        thetas = thetavia(traj,:)';
+        % Cubic interpolation
     case 2
-        % You should define and write other interpolation methods.
+        % Quintic interpolation
+    case 3
+        % LSPB interpolation
     otherwise
         error(['Unknown trajectory type: ' num2str(trajectorytypevia(traj))])
 end
-
-
