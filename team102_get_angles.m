@@ -77,6 +77,6 @@ for i = 1:6
             thetas(i, :) = team102_linear_int(t, tvia(times(1, i)), tvia(times(2, i)), thetavia(times(1, i), i), thetavia(times(2, i), i));
             %thetas = team102_LSPB_int(t, tvia(traj), tvia(traj+1), thetavia(traj,:)', thetavia(traj+1, :)', thetadotvia(traj,:)', thetadotvia(traj+1, :)', t_blend);
         otherwise
-            %error(['Unknown trajectory type: ' num2str(trajectorytypevia(traj))])
+            error(['Unknown trajectory type: ' num2str(trajectorytypevia(traj))])
     end
 end
