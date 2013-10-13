@@ -75,7 +75,7 @@ y = [zeros(length(t)-length(y),2); y];
 
 % Set the start and stop times of the segment we want to test.
 % To play the entire dance, set tstart = t(1) and tstop = t(end).
-tstart = 30; %t(1);
+tstart = t(1)%30; %t(1);
 %tstop = t(end);
 tstop = 55;
 

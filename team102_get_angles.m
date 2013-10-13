@@ -34,19 +34,19 @@ end
 % time that is greater than the current time.  Subtract 1 to get to the
 % index of the via point that starts this trajectory.
 
-% Get the actual via points times for each joint, skipping over any NaN
+% Get the actual via point times for each joint, skipping over any NaN
 % entries in the dance matrix
 traj = find(t < tvia,1) - 1;
 times = zeros(2, 6);
 for i = 1:6
-    % Determine joint specific intperolation starting time
+    % Determine joint specific interpolation starting time
     traj_temp = traj;
     while (isnan(thetavia(traj_temp, i)))
         traj_temp = traj_temp - 1;
     end
     times(1, i) = traj_temp;
     
-    % Determine joint specific intperolation ending time
+    % Determine joint specific interpolation ending time
     traj_temp = traj + 1;
     while (isnan(thetavia(traj_temp, i)))
         traj_temp = traj_temp + 1;
@@ -62,16 +62,21 @@ for i = 1:6
     switch (trajectorytypevia(times(i), i))
         case 0
             % Linear interpolation
-            % You may not use this pcoded file in your solution.
             thetas(i, :) = team102_linear_int(t, tvia(times(1, i)), tvia(times(2, i)), thetavia(times(1, i), i), thetavia(times(2, i), i));
         case 1
             % Cubic interpolation
+            % use linear interpolation until the Cubic code is written
+            thetas(i, :) = team102_linear_int(t, tvia(times(1, i)), tvia(times(2, i)), thetavia(times(1, i), i), thetavia(times(2, i), i));
         case 2
             % Quintic interpolation
+            % use linear interpolation until the Quintic code is written
+            thetas(i, :) = team102_linear_int(t, tvia(times(1, i)), tvia(times(2, i)), thetavia(times(1, i), i), thetavia(times(2, i), i));
         case 3
             % LSPB interpolation
-            thetas = team102_LSPB_int(t, tvia(traj), tvia(traj+1), thetavia(traj,:)', thetavia(traj+1, :)', thetadotvia(traj,:)', thetadotvia(traj+1, :)', t_blend);
+            % use linear interpolation until the LSPB code is written
+            thetas(i, :) = team102_linear_int(t, tvia(times(1, i)), tvia(times(2, i)), thetavia(times(1, i), i), thetavia(times(2, i), i));
+            %thetas = team102_LSPB_int(t, tvia(traj), tvia(traj+1), thetavia(traj,:)', thetavia(traj+1, :)', thetadotvia(traj,:)', thetadotvia(traj+1, :)', t_blend);
         otherwise
-            error(['Unknown trajectory type: ' num2str(trajectorytypevia(traj))])
+            %error(['Unknown trajectory type: ' num2str(trajectorytypevia(traj))])
     end
 end
