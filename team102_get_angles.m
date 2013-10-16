@@ -66,11 +66,11 @@ for i = 1:6
         case 1
             % Cubic interpolation
             % use linear interpolation until the Cubic code is written
-            thetas(i, :) = team102_linear_int(t, tvia(times(1, i)), tvia(times(2, i)), thetavia(times(1, i), i), thetavia(times(2, i), i));
+            thetas(i, :) = team102_cubic_int(t, tvia(times(1, i)), tvia(times(2, i)), thetavia(times(1, i), i), thetavia(times(2, i), i), thetadotvia(times(1, i), i), thetadotvia(times(2, i), i));
         case 2
             % Quintic interpolation
             % use linear interpolation until the Quintic code is written
-            thetas(i, :) = team102_linear_int(t, tvia(times(1, i)), tvia(times(2, i)), thetavia(times(1, i), i), thetavia(times(2, i), i));
+            thetas(i, :) = team102_quintic_int(t, tvia(times(1, i)), tvia(times(2, i)), thetavia(times(1, i), i), thetavia(times(2, i), i), thetadotvia(times(1, i), i), thetadotvia(times(2, i), i), theta2dotvia(times(1, i), i), theta2dotvia(times(2, i), i));
         case 3
             % LSPB interpolation
             thetas(i, :) = team102_LSPB_int(t, tvia(times(1, i)), tvia(times(2, i)), thetavia(times(1, i), i), thetavia(times(2, i), i), thetadotvia(times(1, i), i), thetadotvia(times(2, i), i));
