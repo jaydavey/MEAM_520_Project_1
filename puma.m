@@ -122,12 +122,12 @@ function theta1_slider_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-theta1 = (pi*get(handles.theta1_slider,'Value'))/180; % Convert degrees to radians
-theta2 = (pi*get(handles.theta2_slider,'Value'))/180;
-theta3 = (pi*get(handles.theta3_slider,'Value'))/180;
-theta4 = (pi*get(handles.theta4_slider,'Value'))/180;
-theta5 = (pi*get(handles.theta5_slider,'Value'))/180;
-theta6 = (pi*get(handles.theta6_slider,'Value'))/180;
+theta1 = get(handles.theta1_slider,'Value');
+theta2 = get(handles.theta2_slider,'Value');
+theta3 = get(handles.theta3_slider,'Value');
+theta4 = get(handles.theta4_slider,'Value');
+theta5 = get(handles.theta5_slider,'Value');
+theta6 = get(handles.theta6_slider,'Value');
 set(handles.theta_1_text,'String',get(hObject,'Value')); % Update text box
 handles.plot = visualize_puma(theta1,theta2,theta3,theta4,theta5,theta6); % Update plot
 

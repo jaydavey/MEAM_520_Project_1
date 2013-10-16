@@ -31,8 +31,7 @@ tvia = dance(:,1);
 % Initialize the function that calculates angles.
 team102_get_angles
 
-% Initialize the interpolation functions
-team102_LSPB_int
+% Initialize the 
 
 % Define music filename (without team number).
 musicfilename = 'Check It Yo E';
@@ -79,7 +78,7 @@ y = [zeros(length(t)-length(y),2); y];
 % Set the start and stop times of the segment we want to test.
 % To play the entire dance, set tstart = t(1) and tstop = t(end).
 tstart = t(1);
-tstop = 56.4750000000000;
+tstop = t(end);
 
 % Select only the part of the music that we want to play right now, from
 % tstart to tstop.
@@ -221,6 +220,7 @@ while(true)
     % Get the current time elapsed and add it to the time where we're
     % starting in the song. Store this value in the thistory vector.   
     thistory(i) = toc + tstart;
+    %disp(thistory(i));
     
     % Check if we have passed the end of the performance.
     if (thistory(i) > tstop)
@@ -238,7 +238,7 @@ while(true)
     theta2dothistory(i,:) = thetas(:,3);
 
     % Servo the robot to these new joint angles.
-    pumaMove(thetahistory(i,:));
+    pumaServo(thetahistory(i,:));
         
     % Move the line on the music plot.
     set(hline,'xdata',thistory(i)*[1 1]);
@@ -260,26 +260,24 @@ theta2dothistory(i:end,:) = [];
 % Color order
 color = ['y', 'm', 'c', 'r', 'g', 'b'];
 
-% Open figure 3 and clear it, plot the joint angles over time
+% Open figure 3 and clear it.
 figure(3)
 clf
+subplot(3,1,1)
 h1 = plot(thistory, thetahistory);
 for i = 1:length(h1)
    set(h1(i), 'color', color(i), 'LineWidth', 2) 
 end
 
 hold on
-for i = 1:length(h1)
-    plot([tstart, tstop],[theta_mins(i), theta_mins(i)], 'color', color(i), 'LineStyle', '--')
-    plot([tstart, tstop],[theta_maxs(i), theta_maxs(i)], 'color', color(i), 'LineStyle', '--')
-end
+% for i = 1:length(h1)
+%     plot([tstart, tstop],[theta_mins(i), theta_mins(i)], 'color', color(i), 'LineStyle', '--')
+%     plot([tstart, tstop],[theta_maxs(i), theta_maxs(i)], 'color', color(i), 'LineStyle', '--')
+% end
 
 title(['Team ' num2str(teamnumber) ': Joint Angles over Time'])
 axis auto
-
-% Open figure 4 and clear it, plot the joint velocities over time
-figure(4)
-clf
+subplot(3,1,2)
 h2 = plot(thistory, thetadothistory);
 for i = 1:length(h1)
    set(h2(i), 'color', color(i), 'LineWidth', 2) 
@@ -287,10 +285,7 @@ end
 
 title(['Team ' num2str(teamnumber) ': Joint Velocities over Time'])
 axis auto
-
-% Open figure 5 and clear it, plot the joint accelerations over time
-figure(5)
-clf
+subplot(3,1,3)
 h3 = plot(thistory, theta2dothistory);
 for i = 1:length(h1)
    set(h3(i), 'color', color(i), 'LineWidth', 2) 

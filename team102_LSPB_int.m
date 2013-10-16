@@ -1,15 +1,81 @@
-function [ output_args ] = team102_LSPB_int( t, t_i, t_f, theta_i, theta_f, thetadot_i, thetadot_f, t_blend)
+function thetas = team102_LSPB_int(t, t_i, t_f, theta_i, theta_f, thetadot_i, thetadot_f)
 
-% LSPB interpolation between two points
+% LSPB interpolation between two points, blend time is 10% of total time
+% between via points
 
-if (t < t_blend)
-    % First parabolic segment
-    
-elseif (t < t_f - t_blend)
-    % Linear segment
+% Define persistent constants to prevent constant recalculation
+% Variables are assigned to x = [a0; a1; b0; b1; b2; c0; c1; c2]
+persistent x t_b t_i_check
 
-else
-    % Second parabolic segment
-
+% This function is initialized by calling it with no argument.
+if (nargin == 0)
+   t_i_check = -100000;
+   return
 end
 
+if (t_i == t_i_check)
+    % If timestamp is within previously calculated interpolation boundaries
+    % use previously calculated constants
+    if (t < (t_i + t_b))
+        % First parabolic segment
+        theta = x(3) + x(4)*t + x(5)*t^2;
+        thetadot = x(4) + 2*x(5)*t;
+        theta2dot = 2*x(5);
+        thetas = [theta, thetadot, theta2dot];
+        
+    elseif (t < (t_f - t_b))
+        % Linear segment
+        theta = x(1) + x(2)*t;
+        thetadot = x(2);
+        theta2dot = 0;
+        thetas = [theta, thetadot, theta2dot];
+        
+    else
+        % Second parabolic segment
+        theta = x(6) + x(7)*t + x(8)*t^2;
+        thetadot = x(7) + 2*x(8)*t;
+        theta2dot = 2*x(8);
+        thetas = [theta, thetadot, theta2dot];
+        
+    end
+    
+else
+    % If timestamp is the beginning of a new interpolation calculate new
+    % constants
+    t_b = 0.1*(t_f - t_i);
+    A = [0, 0, 1, t_i, t_i^2, 0, 0, 0;
+        0, 0, 0, 1, 2*t_i, 0, 0, 0;
+        0, 0, 0, 0, 0, 1, t_f, t_f^2;
+        0, 0, 0, 0, 0, 0, 1, 2*t_f;
+        1, t_f-t_b, 0, 0, 0, -1, -(t_f-t_b), -(t_f-t_b)^2;
+        0, -1, 0, 0, 0, 0, 1, 2*(t_f-t_b);
+        1, t_i+t_b, -1, -(t_i+t_b), -(t_i+t_b)^2, 0, 0, 0;
+        0, -1, 0, 1, 2*(t_i+t_b), 0, 0, 0];
+    B = [theta_i; thetadot_i; theta_f; thetadot_f; 0; 0; 0; 0];
+    x = A\B;
+    t_i_check = t_i;
+    
+    if (t < (t_i + t_b))
+        % First parabolic segment
+        theta = x(3) + x(4)*t + x(5)*t^2;
+        thetadot = x(4) + 2*x(5)*t;
+        theta2dot = 2*x(5);
+        thetas = [theta, thetadot, theta2dot];
+
+    elseif (t < (t_f - t_b))
+        % Linear segment
+        theta = x(1) + x(2)*t;
+        thetadot = x(2);
+        theta2dot = 0;
+        thetas = [theta, thetadot, theta2dot];
+
+    else
+        % Second parabolic segment
+        theta = x(6) + x(7)*t + x(8)*t^2;
+        thetadot = x(7) + 2*x(8)*t;
+        theta2dot = 2*x(8);
+        thetas = [theta, thetadot, theta2dot];
+        
+    end
+    
+end

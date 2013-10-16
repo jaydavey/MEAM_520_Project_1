@@ -1,15 +1,55 @@
-function [ output_args ] = team102_LSPB_int( t, t_i, t_f, theta_i, theta_f, thetadot_i, thetadot_f, t_blend)
+function thetas = team102_LSPB_int( t, t_i, t_f, theta_i, theta_f, thetadot_i, thetadot_f)
 
-% LSPB interpolation between two points
+% LSPB interpolation between two points, blend time is 10% of total time
+% between via points
 
-if (t < t_blend)
-    % First parabolic segment
+% Define persistent constants to prevent constant recalculation
+% Variables are assigned to x = [a0; a1; b0; b1; b2; c0; c1; c2]
+persistent x
+
+if (t_i == t_i_check)
+    % If timestamp is within previously calculated interpolation boundaries
+    % use previously calculated constants
+    if (t < (t_i + t_b))
+        % First parabolic segment
+        theta = x(3) + x(4)*t + x(5)*t^2;
+        thetadot = x(4) + 2*x(5)*t;
+        theta2dot = 2*x(5);
+        thetas = [theta, thetadot, theta2dot];
+        
+    elseif (t < (t_f - t_b))
+        % Linear segment
+
+    else
+        % Second parabolic segment
+        
+    end
     
-elseif (t < t_f - t_blend)
-    % Linear segment
-
 else
-    % Second parabolic segment
+    % If timestamp is the beginning of a new interpolation calculate new
+    % constants
+    A = [0, 0, 1, t_i, t_i^2, 0, 0, 0;
+        0, 0, 0, 1, 2*t_i, 0, 0, 0;
+        0, 0, 0, 0, 0, 1, t_f, t_f^2;
+        0, 0, 0, 0, 0, 0, 1, 2*t_f;
+        1, t_f-t_b, 0, 0, 0, -1, -(t_f-t_b), -(t_f-t_b)^2;
+        0, -1, 0, 0, 0, 0, 1, 2*(t_f-t_b);
+        1, t_i+t_b, -1, -(t_i+t_b), -(t_i+t_b)^2, 0, 0, 0;
+        0, -1, 0, 1, 2*(t_i+t_b), 0, 0, 0];
+    B = [theta_i; thetadot_i; theta_f; thetadot_f];
+    x = A\B;
+    
+    if (t < (t_i + t_b))
+        % First parabolic segment
+        
 
+    elseif (t < (t_f - t_b))
+        % Linear segment
+
+    else
+        % Second parabolic segment
+        
+    end
+    
 end
 

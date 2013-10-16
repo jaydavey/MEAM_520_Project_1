@@ -52,6 +52,7 @@ for i = 1:6
         traj_temp = traj_temp + 1;
     end
     times(2, i) = traj_temp;
+    disp(times)
 end
 
 % Initialize empty thetas matrix
