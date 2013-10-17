@@ -32,6 +32,12 @@ tvia = dance(:,1);
 team102_get_angles
 
 % Initialize the interpolation functions
+team102_cubic_int
+
+% Initialize the interpolation functions
+team102_quintic_int
+
+% Initialize the interpolation functions
 team102_LSPB_int
 
 % Define music filename (without team number).
@@ -79,7 +85,7 @@ y = [zeros(length(t)-length(y),2); y];
 % Set the start and stop times of the segment we want to test.
 % To play the entire dance, set tstart = t(1) and tstop = t(end).
 tstart = t(1);
-tstop = 56.4750000000000;
+tstop = 56.475;%10;%56.475;
 
 % Select only the part of the music that we want to play right now, from
 % tstart to tstop.
@@ -258,20 +264,21 @@ theta2dothistory(i:end,:) = [];
 %% Plot output
 
 % Color order
-color = ['y', 'm', 'c', 'r', 'g', 'b'];
+% orange, m, c, r, g, b
+color = [[1 .5 0]; [1 0 1]; [0 1 1]; [1 0 0]; [0 1 0]; [0 0 1]];
 
 % Open figure 3 and clear it, plot the joint angles over time
 figure(3)
 clf
 h1 = plot(thistory, thetahistory);
 for i = 1:length(h1)
-   set(h1(i), 'color', color(i), 'LineWidth', 2) 
+   set(h1(i), 'color', color(i,:), 'LineWidth', 2) 
 end
 
 hold on
 for i = 1:length(h1)
-    plot([tstart, tstop],[theta_mins(i), theta_mins(i)], 'color', color(i), 'LineStyle', '--')
-    plot([tstart, tstop],[theta_maxs(i), theta_maxs(i)], 'color', color(i), 'LineStyle', '--')
+    plot([tstart, tstop],[theta_mins(i), theta_mins(i)], 'color', color(i,:), 'LineStyle', '--')
+    plot([tstart, tstop],[theta_maxs(i), theta_maxs(i)], 'color', color(i,:), 'LineStyle', '--')
 end
 
 title(['Team ' num2str(teamnumber) ': Joint Angles over Time'])
@@ -282,7 +289,7 @@ figure(4)
 clf
 h2 = plot(thistory, thetadothistory);
 for i = 1:length(h1)
-   set(h2(i), 'color', color(i), 'LineWidth', 2) 
+   set(h2(i), 'color', color(i,:), 'LineWidth', 2) 
 end
 
 title(['Team ' num2str(teamnumber) ': Joint Velocities over Time'])
@@ -293,7 +300,7 @@ figure(5)
 clf
 h3 = plot(thistory, theta2dothistory);
 for i = 1:length(h1)
-   set(h3(i), 'color', color(i), 'LineWidth', 2) 
+   set(h3(i), 'color', color(i,:), 'LineWidth', 2) 
 end
 
 title(['Team ' num2str(teamnumber) ': Joint Accelerations over Time'])

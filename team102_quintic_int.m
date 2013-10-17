@@ -1,35 +1,30 @@
 function thetas = team102_quintic_int(t, t_i, t_f, theta_i, theta_f, thetadot_i, thetadot_f, theta2dot_i, theta2dot_f)
 
 % Quintic interpolation between two points
-% Variables are assigned to x = [a0; a1; a2; a3; a4; a5]
+% Variables are assigned to z = [a0; a1; a2; a3; a4; a5]
 
 % Define persistent constants to prevent constant recalculation
-persistent x t_i_check
+persistent z t_i_check_z
 
 % This function is initialized by calling it with no argument.
 if (nargin == 0)
-   t_i_check = -100000;
+   t_i_check_z = -100000;
    return
 end
 
-if (t_i == t_i_check)
+if (t_i == t_i_check_z)
     % If timestamp is within previously calculated interpolation boundaries
     % use previously calculated constants
-        
-    if (t < t_i)
-        theta = x(1) + x(2)*t + x(3)*t.^2 + x(4)*t.^3 + x(5)*t.^4 + x(6)*t.^5;
-        thetadot = x(2) + 2*x(3)*t + 3*x(4)*t.^2 + 4*x(5)*t.^3 + 5*x(6)*t.^4;
-        theta2dot = 2*x(3) + 6*x(4)*t + 12*x(5)*t.^2 + 20*x(6)*t.^3;
-        thetas = [theta thetadot theta2dot];
-    end
+
+    theta = z(1) + z(2)*t + z(3)*t.^2 + z(4)*t.^3 + z(5)*t.^4 + z(6)*t.^5;
+    thetadot = z(2) + 2*z(3)*t + 3*z(4)*t.^2 + 4*z(5)*t.^3 + 5*z(6)*t.^4;
+    theta2dot = 2*z(3) + 6*z(4)*t + 12*z(5)*t.^2 + 20*z(6)*t.^3;
+    thetas = [theta, thetadot, theta2dot];
     
 else
     % If timestamp is the beginning of a new interpolation calculate new
     % constants
     
-    %conditions
-    B = [theta_i thetadot_i theta2dot_i theta_f thetadot_f theta2dot_f]';
-
     %time elements
     A = [1    t_i   t_i^2     t_i^3    t_i^4    t_i^5; 
          0      1   2*t_i   3*t_i^2  4*t_i^3  5*t_i^4; 
@@ -41,16 +36,16 @@ else
     B = [theta_i; thetadot_i; theta2dot_i; theta_f; thetadot_f; theta2dot_f];
     
     %solve for coefficients
-    x = A\B;
+    z = A\B;
     
-    t_i_check = t_i;
+    t_i_check_z = t_i;
     
-    if (t < t_i)
-        
-        theta = x(1) + x(2)*t + x(3)*t.^2 + x(4)*t.^3 + x(5)*t.^4 + x(6)*t.^5;
-        thetadot = x(2) + 2*x(3)*t + 3*x(4)*t.^2 + 4*x(5)*t.^3 + 5*x(6)*t.^4;
-        theta2dot = 2*x(3) + 6*x(4)*t + 12*x(5)*t.^2 + 20*x(6)*t.^3;
-        thetas = [theta thetadot theta2dot];
-    end
+    theta = z(1) + z(2)*t + z(3)*t.^2 + z(4)*t.^3 + z(5)*t.^4 + z(6)*t.^5;
+    thetadot = z(2) + 2*z(3)*t + 3*z(4)*t.^2 + 4*z(5)*t.^3 + 5*z(6)*t.^4;
+    theta2dot = 2*z(3) + 6*z(4)*t + 12*z(5)*t.^2 + 20*z(6)*t.^3;
+    thetas = [theta, thetadot, theta2dot];
+    
+    %print the start time of interp
+    %fprintf('t_i_check_z: %4.3f \n', t_i_check_z);
 
 end
