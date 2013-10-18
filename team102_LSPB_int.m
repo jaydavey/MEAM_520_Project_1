@@ -43,15 +43,16 @@ else
     % If timestamp is the beginning of a new interpolation calculate new
     % constants
     t_b = 0.1*(t_f - t_i);
-    A = [0, 0, 1, t_i, t_i^2, 0, 0, 0;
-        0, 0, 0, 1, 2*t_i, 0, 0, 0;
-        0, 0, 0, 0, 0, 1, t_f, t_f^2;
-        0, 0, 0, 0, 0, 0, 1, 2*t_f;
-        1, t_f-t_b, 0, 0, 0, -1, -(t_f-t_b), -(t_f-t_b)^2;
-        0, -1, 0, 0, 0, 0, 1, 2*(t_f-t_b);
-        1, t_i+t_b, -1, -(t_i+t_b), -(t_i+t_b)^2, 0, 0, 0;
-        0, -1, 0, 1, 2*(t_i+t_b), 0, 0, 0];
-    B = [theta_i; thetadot_i; theta_f; thetadot_f; 0; 0; 0; 0];
+    A = [0,       0,   1,         t_i,        t_i^2,  0,          0,            0;
+         0,       0,   0,           1,        2*t_i,  0,          0,            0;
+         0,       0,   0,           0,            0,  1,        t_f,        t_f^2;
+         0,       0,   0,           0,            0,  0,          1,        2*t_f;
+         1, t_f-t_b,   0,           0,            0, -1, -(t_f-t_b), -(t_f-t_b)^2;
+         0,      -1,   0,           0,            0,  0,          1,  2*(t_f-t_b);
+         1, t_i+t_b,  -1,  -(t_i+t_b), -(t_i+t_b)^2,  0,          0,            0;
+         0,       -1,  0,           1,  2*(t_i+t_b),  0,          0,            0];
+    
+     B = [theta_i; thetadot_i; theta_f; thetadot_f; 0; 0; 0; 0];
     x = A\B;
     t_i_check = t_i;
     
@@ -77,5 +78,21 @@ else
         thetas = [theta, thetadot, theta2dot];
         
     end
+    
+    %Plot the result to validate the trajectory shape.
+    figure();
+    t_vect_a=[t_i:0.1:t_b];
+    theta_plot_a = x(3) + x(4).*t_vect_a + x(5).*t_vect_a.^2;
+
+    t_vect_b=[t_i+t_b:0.1:t_f-t_b];
+    theta_plot_b = x(1) + x(2).*t_vect_b;
+
+    t_vect_c=[t_f-t_b:0.1:t_f];
+    theta_plot_c = x(6) + x(7).*t_vect_c + x(8).*t_vect_c.^2;
+
+    hold on
+    plot(t_vect_a,theta_plot_a,'-r');
+    plot(t_vect_b,theta_plot_b,'-g');
+    plot(t_vect_c,theta_plot_c,'-b');
     
 end

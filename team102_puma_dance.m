@@ -264,7 +264,8 @@ theta2dothistory(i:end,:) = [];
 %% Plot output
 
 % Color order
-% orange, m, c, r, g, b
+% orange, m, c, r, g, b0
+
 color = [[1 .5 0]; [1 0 1]; [0 1 1]; [1 0 0]; [0 1 0]; [0 0 1]];
 
 % Open figure 3 and clear it, plot the joint angles over time
