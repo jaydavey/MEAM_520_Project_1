@@ -73,7 +73,7 @@ for i = 1:6
             thetas(i, :) = team102_quintic_int(t, tvia(times(1, i)), tvia(times(2, i)), thetavia(times(1, i), i), thetavia(times(2, i), i), thetadotvia(times(1, i), i), thetadotvia(times(2, i), i), theta2dotvia(times(1, i), i), theta2dotvia(times(2, i), i));
         case 3
             % LSPB interpolation
-            thetas(i, :) = team102_LSPB_int2(t, tvia(times(1, i)), tvia(times(2, i)), thetavia(times(1, i), i), thetavia(times(2, i), i), thetadotvia(times(1, i), i), thetadotvia(times(2, i), i));
+            thetas(i, :) = team102_LSPB_int(t, tvia(times(1, i)), tvia(times(2, i)), thetavia(times(1, i), i), thetavia(times(2, i), i), thetadotvia(times(1, i), i), thetadotvia(times(2, i), i));
         otherwise
             error(['Unknown trajectory type: ' num2str(trajectorytypevia(traj))])
     end

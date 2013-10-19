@@ -1,7 +1,6 @@
 function thetas = team102_LSPB_int2(t, t_i, t_f, theta_i, theta_f, thetadot_i, thetadot_f)
 
-theta2dot_i = 1;
-theta2dot_f = 1;
+
 
 % LSPB interpolation between two points, blend time is 10% of total time
 % between via points
@@ -17,9 +16,16 @@ if (nargin == 0)
 end
 
 if (t_i == t_i_check)
+    
+    
+    theta2dot_i = 1;
+    theta2dot_f = 1;
+    
     % If timestamp is within previously calculated interpolation boundaries
     % use previously calculated constants
     if ((t_i<=t)&&(t<=t_i+t_b))
+        
+        
         % First parabolic segment
         theta = x1(1) + x1(2)*t + x1(3)*t^2;
         thetadot = x1(2) + 2*x1(3)*t;
@@ -48,7 +54,10 @@ else
     % constants
     %solve for the tb that gives the desired acceleration
     %t_b = 0.1*(t_f - t_i);
-    V = 
+    %V = 
+    
+    theta2dot_i = 1;
+    theta2dot_f = 1;
     
     %time elements
     A1 = [1        t_i       t_i^2; 

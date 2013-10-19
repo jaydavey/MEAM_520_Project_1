@@ -40,6 +40,9 @@ team102_quintic_int
 % Initialize the interpolation functions
 team102_LSPB_int
 
+% Initialize the interpolation functions
+team102_LSPB_int2
+
 % Define music filename (without team number).
 musicfilename = 'Check It Yo E';
 
