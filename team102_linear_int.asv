@@ -1,0 +1,32 @@
+function thetas = team102_linear_int(t, t_i, t_f, theta_i, theta_f)
+
+% Linear interpolation between two points
+
+% Define persistent constants to prevent constant recalculation
+% Variables are assigned to x = [a0; a1]
+persistent x t_i_check
+
+% This function is initialized by calling it with no argument.
+if (nargin == 0)
+   t_i_check = -100000;
+   return
+end
+
+if (t_i == t_i_check)
+    % If timestamp is within previously calculated interpolation boundaries
+    % use previously calculated constants
+    theta2dot = 0;
+    thetadot = x(2);
+    theta = x(1) + x(2)*t;
+    thetas = [theta, thetadot, theta2dot];
+else
+    % If timestamp is the beginning of a new interpolation calculate new
+    % constants
+    A = [1, t_i;1, t_f];
+    B
+    theta2dot = 0;
+    thetadot = x(2);
+    theta = x(1) + x(2)*t;
+    thetas = [theta, thetadot, theta2dot];
+end
+

@@ -44,11 +44,4 @@ else
     thetadot = z(2) + 2*z(3)*t + 3*z(4)*t.^2 + 4*z(5)*t.^3 + 5*z(6)*t.^4;
     theta2dot = 2*z(3) + 6*z(4)*t + 12*z(5)*t.^2 + 20*z(6)*t.^3;
     thetas = [theta, thetadot, theta2dot];
-    
-%     %Plot the result to validate the trajectory shape.
-%     figure();
-%     t_vect=[t_i:0.1:t_f];
-%     theta_plot = z(1) + z(2).*t_vect + z(3).*t_vect.^2 + z(4).*t_vect.^3 + z(5).*t_vect.^4 + z(6).*t_vect.^5;
-%     plot(t_vect,theta_plot,'-b');
-
 end

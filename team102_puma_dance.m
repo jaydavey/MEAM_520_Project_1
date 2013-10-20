@@ -32,16 +32,10 @@ tvia = dance(:,1);
 team102_get_angles
 
 % Initialize the interpolation functions
+%team102_linear_int
 team102_cubic_int
-
-% Initialize the interpolation functions
 team102_quintic_int
-
-% Initialize the interpolation functions
 team102_LSPB_int
-
-% Initialize the interpolation functions
-team102_LSPB_int2
 
 % Define music filename (without team number).
 musicfilename = 'Check It Yo E';
@@ -88,7 +82,7 @@ y = [zeros(length(t)-length(y),2); y];
 % Set the start and stop times of the segment we want to test.
 % To play the entire dance, set tstart = t(1) and tstop = t(end).
 tstart = t(1);
-tstop = 56.475;%10;%56.475;
+tstop = 56.475;
 
 % Select only the part of the music that we want to play right now, from
 % tstart to tstop.
@@ -112,7 +106,7 @@ figure(2)
 clf
 
 % Plot one of the sound channels to look at.
-plot(tdown,ydown,'Color',[.2 .4 0.8]);
+plot(tdown,ydown,'Color',[.2 .4 .8]);
 xlim([floor(t(1)) ceil(t(end))])
 
 % Turn on hold to allow us to plot more things on this graph.
@@ -286,6 +280,9 @@ for i = 1:length(h1)
 end
 
 title(['Team ' num2str(teamnumber) ': Joint Angles over Time'])
+xlabel('Time (sec)')
+ylabel('Joint Angles (rad)')
+legend('Joint 1', 'Joint 2', 'Joint 3', 'Joint 4', 'Joint 5', 'Joint 6', 'Location', 'NorthEastOutside')
 axis auto
 
 % Open figure 4 and clear it, plot the joint velocities over time
@@ -297,6 +294,9 @@ for i = 1:length(h1)
 end
 
 title(['Team ' num2str(teamnumber) ': Joint Velocities over Time'])
+xlabel('Time (sec)')
+ylabel('Joint Velocity (rad/s)')
+legend('Joint 1', 'Joint 2', 'Joint 3', 'Joint 4', 'Joint 5', 'Joint 6', 'Location', 'NorthEastOutside')
 axis auto
 
 % Open figure 5 and clear it, plot the joint accelerations over time
@@ -308,4 +308,7 @@ for i = 1:length(h1)
 end
 
 title(['Team ' num2str(teamnumber) ': Joint Accelerations over Time'])
+xlabel('Time (sec)')
+ylabel('Joint Acceleration (rad/s^2)')
+legend('Joint 1', 'Joint 2', 'Joint 3', 'Joint 4', 'Joint 5', 'Joint 6', 'Location', 'NorthEastOutside')
 axis auto

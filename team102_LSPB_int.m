@@ -80,19 +80,19 @@ else
     end
     
     %Plot the result to validate the trajectory shape.
-    figure();
-    t_vect_a=[t_i:0.1:t_b];
-    theta_plot_a = x(3) + x(4).*t_vect_a + x(5).*t_vect_a.^2;
-
-    t_vect_b=[t_i+t_b:0.1:t_f-t_b];
-    theta_plot_b = x(1) + x(2).*t_vect_b;
-
-    t_vect_c=[t_f-t_b:0.1:t_f];
-    theta_plot_c = x(6) + x(7).*t_vect_c + x(8).*t_vect_c.^2;
-
-    hold on
-    plot(t_vect_a,theta_plot_a,'-r');
-    plot(t_vect_b,theta_plot_b,'-g');
-    plot(t_vect_c,theta_plot_c,'-b');
+%     figure();
+%     t_vect_a=[t_i:0.1:t_b];
+%     theta_plot_a = x(3) + x(4).*t_vect_a + x(5).*t_vect_a.^2;
+% 
+%     t_vect_b=[t_i+t_b:0.1:t_f-t_b];
+%     theta_plot_b = x(1) + x(2).*t_vect_b;
+% 
+%     t_vect_c=[t_f-t_b:0.1:t_f];
+%     theta_plot_c = x(6) + x(7).*t_vect_c + x(8).*t_vect_c.^2;
+% 
+%     hold on
+%     plot(t_vect_a,theta_plot_a,'-r');
+%     plot(t_vect_b,theta_plot_b,'-g');
+%     plot(t_vect_c,theta_plot_c,'-b');
     
 end
