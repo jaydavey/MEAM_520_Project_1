@@ -1,4 +1,4 @@
-function thetas = team102_quintic_int(t, t_i, t_f, theta_i, theta_f, thetadot_i, thetadot_f, theta2dot_i, theta2dot_f, joint)
+function thetas = team102_quintic_int(t, t_i, t_f, theta_i, theta_f, thetadot_i, thetadot_f, theta2dot_i, theta2dot_f)
 
 % Quintic interpolation between two points
 % Variables are assigned to z = [a0; a1; a2; a3; a4; a5]
@@ -8,18 +8,17 @@ persistent z t_i_check_z
 
 % This function is initialized by calling it with no argument.
 if (nargin == 0)
-    t_i_check_z = ones(6, 1)*-100000;
-   z = zeros(6, 6);
+   t_i_check_z = -100000;
    return
 end
 
-if (t_i == t_i_check_z(joint))
+if (t_i == t_i_check_z)
     % If timestamp is within previously calculated interpolation boundaries
     % use previously calculated constants
 
-    theta = z(1, joint) + z(2, joint)*t + z(3, joint)*t.^2 + z(4, joint)*t.^3 + z(5, joint)*t.^4 + z(6, joint)*t.^5;
-    thetadot = z(2, joint) + 2*z(3, joint)*t + 3*z(4, joint)*t.^2 + 4*z(5, joint)*t.^3 + 5*z(6, joint)*t.^4;
-    theta2dot = 2*z(3, joint) + 6*z(4, joint)*t + 12*z(5, joint)*t.^2 + 20*z(6, joint)*t.^3;
+    theta = z(1) + z(2)*t + z(3)*t.^2 + z(4)*t.^3 + z(5)*t.^4 + z(6)*t.^5;
+    thetadot = z(2) + 2*z(3)*t + 3*z(4)*t.^2 + 4*z(5)*t.^3 + 5*z(6)*t.^4;
+    theta2dot = 2*z(3) + 6*z(4)*t + 12*z(5)*t.^2 + 20*z(6)*t.^3;
     thetas = [theta, thetadot, theta2dot];
     
 else
@@ -37,12 +36,12 @@ else
     B = [theta_i; thetadot_i; theta2dot_i; theta_f; thetadot_f; theta2dot_f];
     
     %solve for coefficients
-    z(:, joint) = A\B;
+    z = A\B;
     
-    t_i_check_z(joint) = t_i;
+    t_i_check_z = t_i;
     
-    theta = z(1, joint) + z(2, joint)*t + z(3, joint)*t.^2 + z(4, joint)*t.^3 + z(5, joint)*t.^4 + z(6, joint)*t.^5;
-    thetadot = z(2, joint) + 2*z(3, joint)*t + 3*z(4, joint)*t.^2 + 4*z(5, joint)*t.^3 + 5*z(6, joint)*t.^4;
-    theta2dot = 2*z(3, joint) + 6*z(4, joint)*t + 12*z(5, joint)*t.^2 + 20*z(6, joint)*t.^3;
+    theta = z(1) + z(2)*t + z(3)*t.^2 + z(4)*t.^3 + z(5)*t.^4 + z(6)*t.^5;
+    thetadot = z(2) + 2*z(3)*t + 3*z(4)*t.^2 + 4*z(5)*t.^3 + 5*z(6)*t.^4;
+    theta2dot = 2*z(3) + 6*z(4)*t + 12*z(5)*t.^2 + 20*z(6)*t.^3;
     thetas = [theta, thetadot, theta2dot];
 end

@@ -1,4 +1,4 @@
-function thetas = team102_cubic_int(t, t_i, t_f, theta_i, theta_f, thetadot_i, thetadot_f)
+function thetas = team102_cubic_int(t, t_i, t_f, theta_i, theta_f, thetadot_i, thetadot_f, joint)
 
 % Cubic interpolation between two points
 % Variables are assigned to y = [a0; a1; a2; a3]
@@ -8,16 +8,17 @@ persistent y t_i_check_y
 
 % This function is initialized by calling it with no argument.
 if (nargin == 0)
-   t_i_check_y = -100000;
+   t_i_check_y = ones(6, 1)*-100000;
+   y = zeros(4, 6);
    return
 end
 
-if (t_i == t_i_check_y)
+if (t_i == t_i_check_y(joint))
     % If timestamp is within previously calculated interpolation boundaries
     % use previously calculated constants
         
-    theta = y(1) + y(2)*t + y(3)*t.^2 + y(4)*t.^3;
-    thetadot = y(2) + 2*y(3)*t + 3*y(4)*t.^2;
+    theta = y(1, joint) + y(2, joint)*t + y(3, joint)*t.^2 + y(4, joint)*t.^3;
+    thetadot = y(2, joint) + 2*y(3, joint)*t + 3*y(4, joint)*t.^2;
     thetas = [theta, thetadot, 0];
     
 else
@@ -33,19 +34,11 @@ else
     B = [theta_i; thetadot_i; theta_f; thetadot_f];
     
     %solve for coefficients
-    y = A\B;
+    y(:, joint) = A\B;
     
-    t_i_check_y = t_i;
+    t_i_check_y(joint) = t_i;
     
-    theta = y(1) + y(2)*t + y(3)*t.^2 + y(4)*t.^3;
-    thetadot = y(2) + 2*y(3)*t + 3*y(4)*t.^2;
+    theta = y(1, joint) + y(2, joint)*t + y(3, joint)*t.^2 + y(4, joint)*t.^3;
+    thetadot = y(2, joint) + 2*y(3, joint)*t + 3*y(4, joint)*t.^2;
     thetas = [theta, thetadot, 0];
-    
-%     %Plot the result to validate the trajectory shape.
-%     figure();
-%     t_vect=[t_i:0.1:t_f];
-%     theta_plot = y(1) + y(2).*t_vect + y(3).*t_vect.^2 + y(4).*t_vect.^3;
-%     thetadot_plot = y(2) + 2*y(3).*t_vect + 3*y(4).*t_vect.^2;
-%     plot(t_vect,theta_plot,'-r');
-            
 end

@@ -9,8 +9,7 @@ persistent x t_b t_i_check
 
 % This function is initialized by calling it with no argument.
 if (nargin == 0)
-   t_i_check = ones(6, 1)*-100000;
-   t_b = zeros(6, 1);
+   t_i_check = zeros(6, )*-100000;
    x = zeros(8, 6);
    return
 end
@@ -18,14 +17,14 @@ end
 if (t_i == t_i_check(joint))
     % If timestamp is within previously calculated interpolation boundaries
     % use previously calculated constants
-    if (t < (t_i + t_b(joint)))
+    if (t < (t_i + t_b))
         % First parabolic segment
         theta = x(3, joint) + x(4, joint)*t + x(5, joint)*t^2;
         thetadot = x(4, joint) + 2*x(5, joint)*t;
         theta2dot = 2*x(5, joint);
         thetas = [theta, thetadot, theta2dot];
 
-    elseif (t < (t_f - t_b(joint)))
+    elseif (t < (t_f - t_b))
         % Linear segment
         theta = x(1, joint) + x(2, joint)*t;
         thetadot = x(2, joint);
@@ -44,28 +43,28 @@ if (t_i == t_i_check(joint))
 else
     % If timestamp is the beginning of a new interpolation calculate new
     % constants
-    t_b(joint) = 0.1*(t_f - t_i);
-    A = [0                0    1                 t_i                 t_i^2    0                   0                     0;
-         0                0    0                   1                 2*t_i    0                   0                     0;
-         0                0    0                   0                     0    1                 t_f                 t_f^2;
-         0                0    0                   0                     0    0                   1                 2*t_f;
-         1   t_f-t_b(joint)    0                   0                     0   -1   -(t_f-t_b(joint))   -(t_f-t_b(joint))^2;
-         0               -1    0                   0                     0    0                   1    2*(t_f-t_b(joint));
-         1   t_i+t_b(joint)   -1   -(t_i+t_b(joint))   -(t_i+t_b(joint))^2    0                   0                     0;
-         0               -1    0                   1    2*(t_i+t_b(joint))    0                   0                     0];
+    t_b = 0.1*(t_f - t_i);
+    A = [0,       0,   1,         t_i,        t_i^2,  0,          0,            0;
+         0,       0,   0,           1,        2*t_i,  0,          0,            0;
+         0,       0,   0,           0,            0,  1,        t_f,        t_f^2;
+         0,       0,   0,           0,            0,  0,          1,        2*t_f;
+         1, t_f-t_b,   0,           0,            0, -1, -(t_f-t_b), -(t_f-t_b)^2;
+         0,      -1,   0,           0,            0,  0,          1,  2*(t_f-t_b);
+         1, t_i+t_b,  -1,  -(t_i+t_b), -(t_i+t_b)^2,  0,          0,            0;
+         0,       -1,  0,           1,  2*(t_i+t_b),  0,          0,            0];
     
      B = [theta_i; thetadot_i; theta_f; thetadot_f; 0; 0; 0; 0];
     x(:, joint) = A\B;
     t_i_check(joint) = t_i;
     
-    if (t < (t_i + t_b(joint)))
+    if (t < (t_i + t_b))
         % First parabolic segment
         theta = x(3, joint) + x(4, joint)*t + x(5, joint)*t^2;
         thetadot = x(4, joint) + 2*x(5, joint)*t;
         theta2dot = 2*x(5, joint);
         thetas = [theta, thetadot, theta2dot];
 
-    elseif (t < (t_f - t_b(joint)))
+    elseif (t < (t_f - t_b))
         % Linear segment
         theta = x(1, joint) + x(2, joint)*t;
         thetadot = x(2, joint);

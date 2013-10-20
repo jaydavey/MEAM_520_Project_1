@@ -241,7 +241,7 @@ while(true)
     theta2dothistory(i,:) = thetas(:,3);
 
     % Servo the robot to these new joint angles.
-    pumaMove(thetahistory(i,:));
+    pumaServo(thetahistory(i,:));
         
     % Move the line on the music plot.
     set(hline,'xdata',thistory(i)*[1 1]);

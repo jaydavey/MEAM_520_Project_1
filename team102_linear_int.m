@@ -1,4 +1,4 @@
-function thetas = team102_linear_int(t, t_i, t_f, theta_i, theta_f)
+function thetas = team102_linear_int(t, t_i, t_f, theta_i, theta_f, joint)
 
 % Linear interpolation between two points
 
